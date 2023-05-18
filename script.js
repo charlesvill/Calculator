@@ -12,9 +12,9 @@ const cbutton = document.querySelector(".c.btn");
 buttons.forEach(button=>{
     button.addEventListener('click',registerInput);
 })
-// opButtons.forEach(button=>{
-//     opButtons.addEventListener('click',registerp);
-// })
+opButtons.forEach(button=>{
+    button.addEventListener('click',registerOp);
+})
 acbutton.addEventListener('click',registerAC);
 cbutton.addEventListener('click', registerC);
 
@@ -49,39 +49,90 @@ function operate(operator,num1,num2){
     }
 }
 
-
-
-
-
-function registerInput(e){
-    validInput=true;
-    let input = e.target.attributes["data-btn"].value;
-    //check if textcontent = "0", return if input is another 0 
-    //check if already decimal point and return if input is another decimal 
-    displayText.textContent +=`${input}`;
+function registerEqual(){
+    if(num1 !== undefined){
+        if(num2 !== undefined){
+            displayText.textContent = operate(operator,num1,num2);
+        }
+    }
 }
 
 
-function registerOp(){
+function clearDisplay(){
+    displayText.textContent = "";
+}
+
+
+function registerInput(e){
+    if (validInput === false){
+        validInput=true;
+        clearDisplay();       
+    }
+    let input = e.target.attributes["data-btn"].value;
+        if(displayText.textContent.length < 15)
+        {
+            const arr = Array.from(displayText.textContent);
+            const decimalChk = (char) => char === ".";
+
+
+                if((displayText.textContent === "0" && input === "0") ||
+                (arr.some(decimalChk) && input === ".")){
+                    return
+                }
+                else
+                {
+                    //delele initialized "0" after valid input
+                    if (displayText.textContent !== "0")
+                    {
+                        displayText.textContent += `${input}`;
+                    }
+                    else
+                    {
+                        if(input !== "."){
+                            displayText.textContent = "";
+                            displayText.textContent += `${input}`;
+                        }else{
+                            displayText.textContent += `${input}`;
+                        }
+                    }
+                }
+        }else return
+        
+}
+
+function registerOp(e){
     //registerI will turn validInput true and registerOp should assign the working display num to num2 and clear and display new operand
     if(validInput){
-        num1 = screenContent;
-        //clear screenContent
-        //switch block to listen to logic of which operand to apply.
+        validInput = false;
+        if(num1 === undefined)
+        {
+            num1 = Number(displayText.textContent);
+            operator = e.target.attributes["data-btn"].value; 
+
+        }
+        else if (num1 !== undefined)
+        {//equal sign has to be processed as an operator if I am to keep this op function to assign num2 is value
+            num2 = Number(displayText.textContent);
+            registerEqual();
+
+            if (e.target.attributes["data-btn"].value !== "="){
+                operator = e.target.attributes["data-btn"].value;
+            }
+            
+            
+        }
+           
     }
 }
 
 function registerAC(){
     displayText.textContent = "0";
+    num1 = undefined;
+    num2 = undefined;
 }
 
 function registerC(){
-
-    console.log(typeof(displayText.textContent));
-    console.log(displayText.textContent.length);   
-
     //should check if the value is null or 0
-    //apply removal of the last element 
     if(displayText.textContent.length === 1){
         return registerAC();
     }else{
@@ -90,11 +141,3 @@ function registerC(){
     
 
 }
-
-//register input for btns
-    //numbers or signs display  
-    //operators will trigger functions
-        //function that turns input as num 1 and prepares for next number
-
-//display function that deals with changing the display as functions are pressed
-//operator function that applies operations updating num 1 and 2. 
