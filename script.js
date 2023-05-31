@@ -2,6 +2,7 @@ let operator;
 let num1;
 let num2;
 let result;
+let regIn = false;
 let opPress = false;
 
 let displayText = document.querySelector(".cont.screen");
@@ -55,29 +56,7 @@ function operate(operator,num1,num2){
 }
 
 function registerEqual(){
-   if(num1 === undefined && num2 === undefined)
-   {
-        return
-   }
-   else if ( num1 !== undefined && num2 === undefined)
-   {
-        num2 = Number(displayText.textContent);
-        result = operate(operator,num1, num2);
-        displayText.textContent = result;
-        console.log(` only num2 undefined \nnum1:${num1}\n num2:${num2}\n operator:${operator} \n answer: ${result}`);
-   }
-   else if(num1 !== undefined && num2 !== undefined)
-   {    
-        result = operate(operator, num1, num2); 
-        displayText.textContent = result;
-    num1 = Number(num2);
-    num2 = Number(displayText.textContent);
-        
-        
-       
-        console.log(`both num filled\nnum1:${num1}\n num2:${num2}\n operator:${operator} \n answer: ${result}`);
-   }
-   else{console.log(`something went wrong in the regEqual num1:${num1}\n num2:${num2}\n operator:${operator} \n answer: ${result}`);}
+   
 }
 
 
@@ -87,7 +66,8 @@ function clearDisplay(){
 
 
 function registerInput(e){
-   
+  regIn = true;
+
     let input = e.target.attributes["data-btn"].value;
         if(displayText.textContent.length < 15)
         {
@@ -125,29 +105,31 @@ function registerInput(e){
 
 function registerOp(e){
     opPress = true;
-    
-        if(num1 === undefined && num2 === undefined)
-        {
+    if (regIn){
+        regIn = false;
+        if (num1 === undefined){
             num1 = Number(displayText.textContent);
-            console.log("num1 has just been assigned");
-            operator = e.target.attributes["data-btn"].value; 
-
+            operator = e.target.attributes["data-btn"].value;
         }
-        else if (num1 !== undefined && num2 === undefined)
-        {//equal sign has to be processed as an operator if I am to keep this op function to assign num2 is value
+        else if (num1 !== undefined && num2 === undefined){
             num2 = Number(displayText.textContent);
-            registerEqual();
-            operator = e.target.attributes["data-btn"].value; 
-            console.log("num 2 and 1 have assigned");           
+            result = operate(operator,num1,num2);
+            displayText.textContent = result;
+            operator = e.target.attributes["data-btn"].value;
         }
         else if (num1 !== undefined && num2 !== undefined){
-            registerEqual(); 
-            num1 = Number(num2);
+            
+            num1 = result;
             num2 = Number(displayText.textContent);
+            console.log("both nums have been filled");
+            result = operate(operator,num1,num2);
+            displayText.textContent = result; 
             operator = e.target.attributes["data-btn"].value;
-            console.log("both assigned but operator pressed")
         }
-        else console.log(`something did not work right num1:${num1} num2: ${num2} `);
+
+    }
+    
+
 }
 
 function registerAC(){
