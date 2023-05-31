@@ -1,13 +1,16 @@
 let operator;
 let num1;
 let num2;
-let validInput = false;
+let result;
+let opPress = false;
 
 let displayText = document.querySelector(".cont.screen");
 const buttons = document.querySelectorAll(".num.btn");
 const opButtons = document.querySelectorAll(".op.btn");
+const equalButton = document.querySelector(".equal.btn");
 const acbutton = document.querySelector(".ac.btn");
 const cbutton = document.querySelector(".c.btn");
+
 
 buttons.forEach(button=>{
     button.addEventListener('click',registerInput);
@@ -15,6 +18,8 @@ buttons.forEach(button=>{
 opButtons.forEach(button=>{
     button.addEventListener('click',registerOp);
 })
+equalButton.addEventListener('click',registerEqual);
+
 acbutton.addEventListener('click',registerAC);
 cbutton.addEventListener('click', registerC);
 
@@ -50,11 +55,29 @@ function operate(operator,num1,num2){
 }
 
 function registerEqual(){
-    if(num1 !== undefined){
-        if(num2 !== undefined){
-            displayText.textContent = operate(operator,num1,num2);
-        }
-    }
+   if(num1 === undefined && num2 === undefined)
+   {
+        return
+   }
+   else if ( num1 !== undefined && num2 === undefined)
+   {
+        num2 = Number(displayText.textContent);
+        result = operate(operator,num1, num2);
+        displayText.textContent = result;
+        console.log(` only num2 undefined \nnum1:${num1}\n num2:${num2}\n operator:${operator} \n answer: ${result}`);
+   }
+   else if(num1 !== undefined && num2 !== undefined)
+   {    
+        result = operate(operator, num1, num2); 
+        displayText.textContent = result;
+    num1 = Number(num2);
+    num2 = Number(displayText.textContent);
+        
+        
+       
+        console.log(`both num filled\nnum1:${num1}\n num2:${num2}\n operator:${operator} \n answer: ${result}`);
+   }
+   else{console.log(`something went wrong in the regEqual num1:${num1}\n num2:${num2}\n operator:${operator} \n answer: ${result}`);}
 }
 
 
@@ -64,17 +87,17 @@ function clearDisplay(){
 
 
 function registerInput(e){
-    if (validInput === false){
-        validInput=true;
-        clearDisplay();       
-    }
+   
     let input = e.target.attributes["data-btn"].value;
         if(displayText.textContent.length < 15)
         {
             const arr = Array.from(displayText.textContent);
             const decimalChk = (char) => char === ".";
 
-
+                if (opPress){
+                    clearDisplay();
+                    opPress = false;
+                }
                 if((displayText.textContent === "0" && input === "0") ||
                 (arr.some(decimalChk) && input === ".")){
                     return
@@ -101,34 +124,37 @@ function registerInput(e){
 }
 
 function registerOp(e){
-    //registerI will turn validInput true and registerOp should assign the working display num to num2 and clear and display new operand
-    if(validInput){
-        validInput = false;
-        if(num1 === undefined)
+    opPress = true;
+    
+        if(num1 === undefined && num2 === undefined)
         {
             num1 = Number(displayText.textContent);
+            console.log("num1 has just been assigned");
             operator = e.target.attributes["data-btn"].value; 
 
         }
-        else if (num1 !== undefined)
+        else if (num1 !== undefined && num2 === undefined)
         {//equal sign has to be processed as an operator if I am to keep this op function to assign num2 is value
             num2 = Number(displayText.textContent);
             registerEqual();
-
-            if (e.target.attributes["data-btn"].value !== "="){
-                operator = e.target.attributes["data-btn"].value;
-            }
-            
-            
+            operator = e.target.attributes["data-btn"].value; 
+            console.log("num 2 and 1 have assigned");           
         }
-           
-    }
+        else if (num1 !== undefined && num2 !== undefined){
+            registerEqual(); 
+            num1 = Number(num2);
+            num2 = Number(displayText.textContent);
+            operator = e.target.attributes["data-btn"].value;
+            console.log("both assigned but operator pressed")
+        }
+        else console.log(`something did not work right num1:${num1} num2: ${num2} `);
 }
 
 function registerAC(){
     displayText.textContent = "0";
     num1 = undefined;
     num2 = undefined;
+    result = undefined;
 }
 
 function registerC(){
