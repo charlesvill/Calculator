@@ -4,6 +4,8 @@ let num2;
 let result;
 let regIn = false;
 let opPress = false;
+let clearElig = false;
+let newOp = false;
 
 let displayText = document.querySelector(".cont.screen");
 const buttons = document.querySelectorAll(".num.btn");
@@ -56,7 +58,19 @@ function operate(operator,num1,num2){
 }
 
 function registerEqual(){
-   
+     newOp = true;
+   if (opPress || regIn){
+    opPress = false;
+    regIn = false;
+    num2 = Number(displayText.textContent);
+    result = operate(operator,num1,num2);
+    displayText.textContent = result;
+   }
+   else {
+    num1 = Number(displayText.textContent);
+    result = operate(operator,num1,num2);
+    displayText.textContent = result;
+    }
 }
 
 
@@ -67,16 +81,17 @@ function clearDisplay(){
 
 function registerInput(e){
   regIn = true;
-
+  opPress = false; 
+  newOp = false; 
     let input = e.target.attributes["data-btn"].value;
         if(displayText.textContent.length < 15)
         {
             const arr = Array.from(displayText.textContent);
             const decimalChk = (char) => char === ".";
 
-                if (opPress){
+                if (clearElig){
                     clearDisplay();
-                    opPress = false;
+                    clearElig = false;
                 }
                 if((displayText.textContent === "0" && input === "0") ||
                 (arr.some(decimalChk) && input === ".")){
@@ -99,13 +114,18 @@ function registerInput(e){
                         }
                     }
                 }
+                
         }else return
         
 }
 
 function registerOp(e){
     opPress = true;
+    clearElig = true; 
+    
+    
     if (regIn){
+        console.log("op pressed");
         regIn = false;
         if (num1 === undefined){
             num1 = Number(displayText.textContent);
@@ -118,17 +138,22 @@ function registerOp(e){
             operator = e.target.attributes["data-btn"].value;
         }
         else if (num1 !== undefined && num2 !== undefined){
-            
+            console.log("this should be triggered");
             num1 = result;
             num2 = Number(displayText.textContent);
             console.log("both nums have been filled");
             result = operate(operator,num1,num2);
             displayText.textContent = result; 
             operator = e.target.attributes["data-btn"].value;
+            // opElig = false;
         }
 
     }
-    
+    else if (newOp){
+        num1 = result;
+        num2 = undefined;
+        operator = e.target.attributes["data-btn"].value; 
+    }
 
 }
 
