@@ -9,36 +9,45 @@
 </head>
 <body>
     <div class="frame">
-        <div class="cont screen">0</div>
-        <div class="cont r1">
-            <button data-btn="ac" class="ac btn">ac</button>
-            <button data-btn="c" class="c btn">c</button>
-            <button data-btn="2" class="fn btn">2nd</button>
-            <button data-btn="+" class="op btn">+</button>
+        <div style="overflow:hidden" class="cont screen" maxlength="1">0</div>
+        <div class="btnpad">
+            <div class="leftPad">
+                <div class="cont r1">
+                    <button data-btn="ac" class="ac btn">ac</button>
+                    <button data-btn="c" class="c btn">c</button>
+                    <button data-btn="+" class="op btn">+</button>
+                    <button data-btn="-" class="op btn">-</button>
+                </div>
+                <div class="cont r2">
+                    <button data-btn="7" class="num btn">7</button>
+                    <button data-btn="8" class="num btn">8</button>
+                    <button data-btn="9" class="num btn">9</button>
+                    <button data-btn="*" class="op btn">*</button>
+        
+                </div>
+                <div class="cont r3">
+                    <button data-btn="4" class="num btn">4</button>
+                    <button data-btn="5" class="num btn">5</button>
+                    <button data-btn="6" class="num btn">6</button>
+                    <button data-btn="/" class="op btn">/</button>
+        
+                </div>
+                <div class="cont r4">
+                    <button data-btn="1" class="num btn">1</button>
+                    <button data-btn="2" class="num btn">2</button>
+                    <button data-btn="3" class="num btn">3</button>
+                </div>
+                <div class="cont r5">
+                    <button data-btn="0" class="num btn" id="zero">0</button>
+                    <button data-btn="." class="num btn">.</button>
+                    <button data-btn="=" class="equal btn">=</button>
+                </div>
+            </div>
+            <div class="rightPad">
+
+            </div>
         </div>
-        <div class="cont r2">
-            <button data-btn="7" class="num btn">7</button>
-            <button data-btn="8" class="num btn">8</button>
-            <button data-btn="9" class="num btn">9</button>
-            <button data-btn="-" class="op btn">-</button>
-        </div>
-        <div class="cont r3">
-            <button data-btn="4" class="num btn">4</button>
-            <button data-btn="5" class="num btn">5</button>
-            <button data-btn="6" class="num btn">6</button>
-            <button data-btn="*" class="op btn">*</button>
-        </div>
-        <div clas="cont r4">
-            <button data-btn="1" class="num btn">1</button>
-            <button data-btn="2" class="num btn">2</button>
-            <button data-btn="3" class="num btn">3</button>
-            <button data-btn="/" class="op btn">/</button>
-        </div>
-        <div class="cont r5">
-            <button data-btn="0" class="num btn">0</button>
-            <button data-btn="." class="num btn">.</button>
-            <button data-btn="=" class="equal btn">=</button>
-        </div>
+        
     </div>
 
     <script src="./script.js"></script>

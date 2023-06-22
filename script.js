@@ -6,7 +6,7 @@ let regIn = false;
 let opPress = false;
 let clearElig = false;
 let newOp = false;
-const screenCharLimit = 12;
+const screenCharLimit = 9;
 
 let displayText = document.querySelector(".cont.screen");
 const buttons = document.querySelectorAll(".num.btn");
@@ -20,7 +20,7 @@ buttons.forEach(button=>{
     button.addEventListener('click',clickInput);
 })
 opButtons.forEach(button=>{
-    button.addEventListener('click',registerOp);
+    button.addEventListener('click',clickOp);
 })
 equalButton.addEventListener('click',registerEqual);
 
@@ -30,36 +30,50 @@ cbutton.addEventListener('click', registerC);
 document.addEventListener('keydown', (event) => {
     
     var code = event.code;
+    var key = event.key;
     // Alert the key name and key code on keydown
-    registerKeyEvent(event.key);
+    registerKeyEvent(key,code);
   }, false);
 
-  function registerKeyEvent(key){
-    if (key === 'Shift'){
-        //do nothing
-        return;
-    }
-    else {
+  function registerKeyEvent(key, code){
+    
+    
         switch(key){
-            case "1","2","3","4","5","6","7","8","9","0":
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
+            case '.':
                 registerInput(key);
                 break;
-            case "*", "+", "-", "/": 
+            case '+': 
+            case '-':
+            case '*':
+            case '/':
                 registerOp(key);
+                console.log('an oerator was pressed');
                 break;
-            case "=": 
+            case '=':
+            case 'Enter':
                 registerEqual();
-                default: console.log(`key pressed: ${key} and the type of is: ${typeof(key)}`);
-                registerInput(key);
-                //keyinputs register in display however the switch opearator completely broken. does not work. 
+                break;
+            case 'Backspace':
+                registerC();
+                break;
+            case 'Delete':
+                registerAC();
+                break;
+            default:
+                console.log("this key is not registered");
         }
-    }
-    //passthrough the event.key
-    //allow shift inputs
-    //conditional sort keypresses to allow for shift presses
-    //ignore other inputs
-
-    //call other functions per matched keypresses.
+    
+    
 
   }
 
@@ -142,7 +156,7 @@ function updateDisplay(result){
 
 function clickInput(e){
     let num = e.target.attributes["data-btn"].value;
-    registerInput(input);
+    registerInput(num);
 }
 
 function registerInput(input){
@@ -184,8 +198,13 @@ function registerInput(input){
         }else return
 
 }
+function clickOp(e){
+   clickOp = e.target.attributes["data-btn"].value;
+   registerOp(clickOp);
 
-function registerOp(e){
+}
+
+function registerOp(inputOp){
     opPress = true;
     clearElig = true;
 
@@ -195,13 +214,13 @@ function registerOp(e){
         regIn = false;
         if (num1 === undefined){
             num1 = Number(displayText.textContent);
-            operator = e.target.attributes["data-btn"].value;
+            operator = inputOp;
         }
         else if (num1 !== undefined && num2 === undefined){
             num2 = Number(displayText.textContent);
             result = operate(operator,num1,num2);
             displayText.textContent = result;
-            operator = e.target.attributes["data-btn"].value;
+            operator = inputOp;
         }
         else if (num1 !== undefined && num2 !== undefined){
             console.log("this should be triggered");
@@ -210,7 +229,7 @@ function registerOp(e){
             console.log("both nums have been filled");
             result = operate(operator,num1,num2);
             displayText.textContent = result;
-            operator = e.target.attributes["data-btn"].value;
+            operator = inputOp;
             // opElig = false;
         }
 
@@ -219,7 +238,7 @@ function registerOp(e){
         num1 = result;
         num2 = undefined;
         result = undefined;
-        operator = e.target.attributes["data-btn"].value;
+        operator = inputOp;
     }
 
 }
